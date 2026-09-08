@@ -25,9 +25,14 @@ func _run() -> void:
 		_fail("Rejected over-capacity purchase changed currency or ownership")
 		return
 	game.scrap = original_scrap
-	game.selected = original_selected
+	game.selected = {"chassis": 0, "wheels": 0, "weapons": 0}
 	game.unlocked = original_unlocked
+	for opponent in game.OPPONENTS:
+		if not game._loadout_fits(int(opponent.chassis), int(opponent.wheels), int(opponent.weapon)):
+			_fail("CPU loadout exceeds the same power capacity enforced for the player")
+			return
 
+	game.trophies = 27
 	game.start_battle()
 	await process_frame
 	if game.mode != game.GameMode.BATTLE or not is_instance_valid(game.player_bot) or not is_instance_valid(game.enemy_bot):
@@ -35,6 +40,14 @@ func _run() -> void:
 		return
 	if game.battle_started or not is_equal_approx(game.battle_time, 24.0):
 		_fail("Countdown incorrectly consumed battle time")
+		return
+	var opponent: Dictionary = game.OPPONENTS[game.opponent_index]
+	var expected_hp: float = float(game.CHASSIS[opponent.chassis].hp) + float(game.WHEELS[opponent.wheels].armor)
+	if not is_equal_approx(game.enemy_bot.max_hp, expected_hp):
+		_fail("CPU chassis or wheel stats differ from the player's equipment stats")
+		return
+	if not is_equal_approx(float(game.enemy_bot.weapon.damage), float(game.WEAPONS[opponent.weapon].damage)):
+		_fail("CPU weapon stats differ from the player's equipment stats")
 		return
 	game.player_bot.active = true
 	game.enemy_bot.active = true
@@ -61,6 +74,7 @@ func _run() -> void:
 	if game.mode != game.GameMode.GARAGE:
 		_fail("Return-to-workshop flow failed")
 		return
+	game.selected = original_selected
 
 	print("SMOKE PASS: garage -> battle -> results -> garage")
 	quit(0)

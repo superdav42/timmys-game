@@ -28,7 +28,7 @@ The game uses the broad build/watch/reward loop common to vehicle-construction b
 - **Chassis:** Moss Bug is balanced; Tin Kite is quick with a large power budget; Brick Beetle is slow and durable.
 - **Button boots:** steady Button Boots, fast Comet Rollers, and armored Tumble Treads.
 - **Tools:** Spark Fork lifts at close range, Buzz Bloom deals rapid melee damage, and Acorn Mortar trades fire rate for long range.
-- Rival loadouts cycle from balanced to fast melee to armored range, gaining 7% health and damage each three-trophy level so progression continues indefinitely.
+- Rival loadouts cycle from balanced to fast melee to armored range. Every rival uses the same unmodified part stats and chassis power-capacity rule available to the player; trophy levels change the matchup cycle and rewards, not equipment strength.
 
 ## UX principles
 
@@ -45,8 +45,9 @@ The game uses the broad build/watch/reward loop common to vehicle-construction b
 
 - Garage allows selection and purchase across three parts in each category.
 - Invalid over-capacity configurations are blocked with useful feedback.
+- CPU configurations obey the same power limits and use the same equipment stats as player configurations.
 - Procedurally drawn machines visibly reflect selected chassis, wheels, tools, and pilot colors.
-- Three autonomous opponents use distinct builds and scale with trophies.
+- Three autonomous opponents use distinct legal builds and cycle as trophies increase.
 - Battle resolves through health depletion or the 24-second timer.
 - Win/loss/draw result screen supports rematch and rebuild flows.
 - Headless Godot startup exits without parser or runtime errors.

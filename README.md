@@ -13,7 +13,7 @@ The published build is a static browser game with no accounts, advertising, anal
 - Garage with three original chassis, button-boot, and tool families.
 - Purchases, local saving, scrap rewards, trophies, and opponent progression.
 - Autonomous 1v1 combat with melee, lifting, and ranged behaviors.
-- Fair simultaneous-hit resolution, explicit draws, numeric health, and scaling rivals.
+- Fair simultaneous-hit resolution, explicit draws, numeric health, and rivals constrained by the same part stats and power limits as the player.
 - Procedural vector art; no third-party game assets or copied characters.
 
 ## Requirements

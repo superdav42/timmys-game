@@ -29,7 +29,7 @@ const WEAPONS := [
 const OPPONENTS := [
 	{"name": "Moxie", "chassis": 0, "wheels": 0, "weapon": 0, "color": "e76f51", "rank": "Dandelion III"},
 	{"name": "Pogo", "chassis": 1, "wheels": 1, "weapon": 1, "color": "577590", "rank": "Dandelion II"},
-	{"name": "Juniper", "chassis": 2, "wheels": 2, "weapon": 2, "color": "9b5de5", "rank": "Dandelion I"},
+	{"name": "Juniper", "chassis": 2, "wheels": 0, "weapon": 2, "color": "9b5de5", "rank": "Dandelion I"},
 ]
 
 var mode := GameMode.GARAGE
@@ -220,12 +220,13 @@ func start_battle() -> void:
 	queue_redraw()
 
 	var opponent: Dictionary = OPPONENTS[opponent_index]
+	if not _loadout_fits(int(opponent.chassis), int(opponent.wheels), int(opponent.weapon)):
+		push_error("Opponent loadout exceeds its chassis power capacity")
+		show_garage()
+		return
 	var opponent_chassis: Dictionary = CHASSIS[opponent.chassis].duplicate(true)
 	var opponent_wheels: Dictionary = WHEELS[opponent.wheels].duplicate(true)
 	var opponent_weapon: Dictionary = WEAPONS[opponent.weapon].duplicate(true)
-	var opponent_scale := 1.0 + float(opponent_level - 1) * 0.07
-	opponent_chassis.hp = roundi(float(opponent_chassis.hp) * opponent_scale)
-	opponent_weapon.damage = roundi(float(opponent_weapon.damage) * opponent_scale)
 	player_bot = BattleBotScript.new()
 	player_bot.position = Vector2(140, 885)
 	player_bot.floor_y = 885.0
@@ -488,18 +489,28 @@ func _selected_hp() -> int:
 
 
 func _loadout_has_power() -> bool:
-	return int(WHEELS[selected.wheels].power) + int(WEAPONS[selected.weapons].power) <= int(CHASSIS[selected.chassis].power)
+	return _loadout_fits(int(selected.chassis), int(selected.wheels), int(selected.weapons))
 
 
 func _candidate_power(category: String, index: int) -> int:
 	var wheels_index: int = index if category == "wheels" else int(selected.wheels)
 	var weapon_index: int = index if category == "weapons" else int(selected.weapons)
-	return int(WHEELS[wheels_index].power) + int(WEAPONS[weapon_index].power)
+	return _loadout_power(wheels_index, weapon_index)
 
 
 func _selection_fits(category: String, index: int) -> bool:
 	var chassis_index: int = index if category == "chassis" else int(selected.chassis)
-	return _candidate_power(category, index) <= int(CHASSIS[chassis_index].power)
+	var wheels_index: int = index if category == "wheels" else int(selected.wheels)
+	var weapon_index: int = index if category == "weapons" else int(selected.weapons)
+	return _loadout_fits(chassis_index, wheels_index, weapon_index)
+
+
+func _loadout_power(wheels_index: int, weapon_index: int) -> int:
+	return int(WHEELS[wheels_index].power) + int(WEAPONS[weapon_index].power)
+
+
+func _loadout_fits(chassis_index: int, wheels_index: int, weapon_index: int) -> bool:
+	return _loadout_power(wheels_index, weapon_index) <= int(CHASSIS[chassis_index].power)
 
 
 func _part_stats(category: String, part: Dictionary) -> String:

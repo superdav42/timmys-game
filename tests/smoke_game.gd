@@ -49,6 +49,13 @@ func _run() -> void:
 	if not is_equal_approx(float(game.enemy_bot.weapon.damage), float(game.WEAPONS[opponent.weapon].damage)):
 		_fail("CPU weapon stats differ from the player's equipment stats")
 		return
+	var equipment_speed: float = float(game.WHEELS[0].speed) * float(game.CHASSIS[0].speed_mod)
+	if not is_equal_approx(game.enemy_bot.move_speed, equipment_speed):
+		_fail("CPU movement speed differs from its unmodified equipment stats")
+		return
+	if not is_equal_approx(game.player_bot.move_speed, equipment_speed * game.PLAYER_SPEED_MULTIPLIER):
+		_fail("Player movement speed did not receive Pip's mobility boost")
+		return
 	game.player_bot.active = true
 	game.enemy_bot.active = true
 	game.player_bot._attack()

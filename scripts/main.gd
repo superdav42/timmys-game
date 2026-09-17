@@ -10,6 +10,7 @@ const CREAM := Color("fff4d6")
 const MINT := Color("b8e0c2")
 const CORAL := Color("ff7f66")
 const GOLD := Color("f2c14e")
+const PLAYER_SPEED_MULTIPLIER := 1.2
 
 const CHASSIS := [
 	{"name": "Moss Bug", "tag": "Balanced", "hp": 135, "power": 7, "speed_mod": 1.0, "width": 150, "height": 72, "color": "68b684", "cost": 0},
@@ -133,7 +134,8 @@ func show_garage() -> void:
 	var power_max := int(CHASSIS[selected.chassis].power)
 	var stats_panel := _panel(Vector2(34, 510), Vector2(652, 58), Color("fff8e8"), 18, Color("86b99f"), 3)
 	ui.add_child(stats_panel)
-	var stats := _label("%d HP     •     %d/%d POWER     •     %d HIT" % [_selected_hp(), power_used, power_max, int(WEAPONS[selected.weapons].damage)], 20, INK)
+	var speed_bonus := roundi((PLAYER_SPEED_MULTIPLIER - 1.0) * 100.0)
+	var stats := _label("%d HP  •  %d/%d POWER  •  %d HIT  •  +%d%% DRIVE" % [_selected_hp(), power_used, power_max, int(WEAPONS[selected.weapons].damage), speed_bonus], 18, INK)
 	stats.position = Vector2(24, 13)
 	stats_panel.add_child(stats)
 
@@ -230,7 +232,7 @@ func start_battle() -> void:
 	player_bot = BattleBotScript.new()
 	player_bot.position = Vector2(140, 885)
 	player_bot.floor_y = 885.0
-	player_bot.configure("Pip", CHASSIS[selected.chassis], WHEELS[selected.wheels], WEAPONS[selected.weapons], Color("e05d8b"), 1.0)
+	player_bot.configure("Pip", CHASSIS[selected.chassis], WHEELS[selected.wheels], WEAPONS[selected.weapons], Color("e05d8b"), 1.0, PLAYER_SPEED_MULTIPLIER)
 	add_child(player_bot)
 	enemy_bot = BattleBotScript.new()
 	enemy_bot.position = Vector2(580, 885)

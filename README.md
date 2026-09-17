@@ -14,6 +14,7 @@ The published build is a static browser game with no accounts, advertising, anal
 - Purchases, local saving, scrap rewards, trophies, and opponent progression.
 - Autonomous 1v1 combat with melee, lifting, and ranged behaviors.
 - Fair simultaneous-hit resolution, explicit draws, numeric health, and rivals constrained by the same part stats and power limits as the player.
+- A visible 20% Pip drive-speed bonus keeps the player's machine moving quickly without altering rival equipment stats.
 - Procedural vector art; no third-party game assets or copied characters.
 
 ## Requirements

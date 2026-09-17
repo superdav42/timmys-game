@@ -25,7 +25,7 @@ var spin_velocity := 0.0
 var body_width := 145.0
 
 
-func configure(bot_name: String, chassis_data: Dictionary, wheel_data: Dictionary, weapon_data: Dictionary, color: Color, direction: float = 1.0) -> void:
+func configure(bot_name: String, chassis_data: Dictionary, wheel_data: Dictionary, weapon_data: Dictionary, color: Color, direction: float = 1.0, speed_multiplier: float = 1.0) -> void:
 	display_name = bot_name
 	chassis = chassis_data
 	wheels = wheel_data
@@ -34,7 +34,7 @@ func configure(bot_name: String, chassis_data: Dictionary, wheel_data: Dictionar
 	facing = direction
 	max_hp = float(chassis.get("hp", 100)) + float(wheels.get("armor", 0))
 	hp = max_hp
-	move_speed = float(wheels.get("speed", 75)) * float(chassis.get("speed_mod", 1.0))
+	move_speed = float(wheels.get("speed", 75)) * float(chassis.get("speed_mod", 1.0)) * speed_multiplier
 	body_width = float(chassis.get("width", 145))
 	queue_redraw()
 
